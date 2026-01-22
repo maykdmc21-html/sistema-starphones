@@ -1,13 +1,14 @@
 /* ===============================
    NUMERAÇÃO AUTOMÁTICA DA OS
    =============================== */
-function proximaOS() {
-    let numero = localStorage.getItem("numeroOS");
-    if (!numero) numero = 1000;
+function proximaOC() {
+    let numero = localStorage.getItem("numeroOC");
+    if (!numero) numero = 2000;
     numero = parseInt(numero) + 1;
-    localStorage.setItem("numeroOS", numero);
+    localStorage.setItem("numeroOC", numero);
     return numero;
 }
+
 
 /* ===============================
    FORMATA DATA (YYYY-MM-DD → DD/MM/YYYY)
@@ -136,4 +137,82 @@ descrito nesta ordem.`,
        SALVAR PDF
        =============================== */
     pdf.save(`OS_${numeroOS}.pdf`);
+}
+
+/* ===============================
+   GERAR ORDEM DE COMPRA (PDF)
+   =============================== */
+
+   function gerarOC() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF();
+
+    const numeroOC = proximaOC();
+
+    const data = formatarData(document.getElementById("ocData").value);
+    const fornecedor = document.getElementById("ocFornecedor").value;
+    const telefone = document.getElementById("ocTelefone").value;
+    const cnpj = document.getElementById("ocCnpj").value;
+
+    const produto = document.getElementById("ocEquipamento").value;
+    const serie = document.getElementById("ocSerie").value;
+    const modelo = document.getElementById("ocModelo").value;
+    const ficha = document.getElementById("ocFicha").value;
+
+    const valor = document.getElementById("ocValor").value;
+    const pagamento = document.getElementById("ocPagamento").value;
+
+    /* CABEÇALHO */
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(15);
+    pdf.text("STARTPHONES", 105, 15, { align: "center" });
+
+    pdf.setFontSize(9);
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Rua Dep. Luiz, nº 69", 105, 20, { align: "center" });
+    pdf.text("Telefone: 98985366343", 105, 24, { align: "center" });
+
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(12);
+    pdf.text("ORDEM DE COMPRA", 105, 32, { align: "center" });
+
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`OC Nº: ${numeroOC}`, 150, 38);
+    pdf.text(`Data: ${data}`, 150, 44);
+
+    pdf.line(10, 48, 200, 48);
+
+    /* FORNECEDOR */
+    pdf.setFont("helvetica", "bold");
+    pdf.text("DADOS DO FORNECEDOR", 10, 56);
+
+    pdf.rect(10, 59, 190, 24);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Nome: ${fornecedor}`, 12, 66);
+    pdf.text(`Telefone: ${telefone}`, 12, 72);
+    pdf.text(`CNPJ: ${cnpj}`, 120, 72);
+
+    /* PRODUTO */
+    pdf.setFont("helvetica", "bold");
+    pdf.text("DADOS DO PRODUTO", 10, 90);
+
+    pdf.rect(10, 93, 190, 36);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Produto: ${produto}`, 12, 100);
+    pdf.text(`Modelo: ${modelo}`, 12, 106);
+    pdf.text(`Série: ${serie}`, 12, 112);
+
+    pdf.text("Fichas Técnicas:", 12, 118);
+    pdf.text(ficha || "-", 12, 124);
+
+    /* VALOR */
+    pdf.setFont("helvetica", "bold");
+    pdf.text("VALOR DA COMPRA", 10, 142);
+
+    pdf.rect(10, 145, 190, 16);
+    pdf.setFont("helvetica", "normal");
+    pdf.text(`Valor: R$ ${valor}`, 12, 154);
+    pdf.text(`Forma de Pagamento: ${pagamento}`, 120, 154);
+
+    pdf.save(`OC_${numeroOC}.pdf`);
 }
