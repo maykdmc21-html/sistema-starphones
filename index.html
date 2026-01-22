@@ -39,6 +39,16 @@
             <option>Formatação</option>
             <option>Remoção de Vírus</option>
             <option>Reparo de Placas</option>
+            <option>Manutenção </option>
+            <option>Troca de tela</option>
+            <option>Troca de bateria</option>
+            <option>Troca de conector</option>
+            <option>Troca periféricos</option>
+            <option>Venda de Carregador</option>
+            <option>Venda de Cabo</option>
+            <option>Venda de pelicula</option>
+            <option>Venda de fone de ouvido</option>
+    
         </select>
 
         <input type="number" id="valorEntrada" placeholder="Valor">
@@ -140,7 +150,33 @@
 
         <button onclick="gerarOS()">Gerar Ordem de Serviço (PDF)</button>
 
-        
+        <section class="card">
+    <h2>Ordem de Compra</h2>
+
+    <input type="date" id="ocData">
+
+    <input id="ocFornecedor" placeholder="Nome do Fornecedor">
+    <input id="ocTelefone" placeholder="Telefone">
+    <input id="ocCnpj" placeholder="CNPJ">
+
+    <input id="ocEquipamento" placeholder="Produto / Equipamento">
+    <input id="ocSerie" placeholder="Número de Série">
+    <input id="ocModelo" placeholder="Modelo">
+
+    <textarea id="ocFicha" placeholder="Fichas Técnicas"></textarea>
+
+    <input id="ocValor" placeholder="Valor da Compra">
+
+    <select id="ocPagamento">
+        <option>Dinheiro</option>
+        <option>PIX</option>
+        <option>Cartão Débito</option>
+        <option>Cartão Crédito</option>
+    </select>
+
+    <button onclick="gerarOC()">Gerar Ordem de Compra (PDF)</button>
+</section>
+
     </section>
 
     <!-- FUTURO MÓDULO -->
