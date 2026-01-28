@@ -184,10 +184,61 @@ function gerarRelatorio() {
     } else {
         doc.setFontSize(12); doc.setFont("helvetica", "bold");
         doc.text(`RELATÓRIO DE ${tipo.toUpperCase()}`, 10, 40);
-        // Aqui você pode adicionar a lógica de listagem para outros tipos se desejar
     }
 
-    doc.save(`Faturamento_StartPhone_${dataE.replace(/\//g, '-')}.pdf`);
+    doc.save(`Relatorio_StartPhone_${dataE.replace(/\//g, '-')}.pdf`);
+}
+
+/* ===============================
+    GERAR ORDEM DE SERVIÇO (PDF)
+   =============================== */
+function gerarOS() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const dataOS = document.getElementById("osData").value;
+    const cliente = document.getElementById("osCliente").value;
+    const equipamento = document.getElementById("osEquipamento").value;
+    const valor = document.getElementById("osValor").value;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("ORDEM DE SERVIÇO - STARTPHONES", 10, 15);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Cliente: ${cliente}`, 10, 30);
+    doc.text(`Telefone: ${document.getElementById("osTelefone").value}`, 10, 35);
+    doc.text(`Equipamento: ${equipamento}`, 10, 45);
+    doc.text(`IMEI/Série: ${document.getElementById("osImei").value}`, 10, 50);
+    doc.text(`Defeito: ${document.getElementById("osObs").value}`, 10, 60);
+    doc.text(`Valor: R$ ${valor}`, 10, 75);
+    doc.text(`Data: ${formatarData(dataOS)}`, 10, 80);
+
+    doc.save(`OS_${cliente}.pdf`);
+}
+
+/* ===============================
+    GERAR ORDEM DE COMPRA (PDF)
+   =============================== */
+function gerarOC() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const dataOC = document.getElementById("ocData").value;
+    const fornecedor = document.getElementById("ocFornecedor").value;
+    const produto = document.getElementById("ocEquipamento").value;
+    const valor = document.getElementById("ocValor").value;
+
+    doc.setFont("helvetica", "bold");
+    doc.text("ORDEM DE COMPRA - STARTPHONES", 10, 15);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fornecedor: ${fornecedor}`, 10, 30);
+    doc.text(`Produto: ${produto}`, 10, 40);
+    doc.text(`Valor: R$ ${valor}`, 10, 50);
+    doc.text(`Data: ${formatarData(dataOC)}`, 10, 60);
+
+    doc.save(`OC_${fornecedor}.pdf`);
 }
 
 /* ===============================
