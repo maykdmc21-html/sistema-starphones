@@ -4,192 +4,124 @@
 <meta charset="UTF-8">
 <title>Sistema StartPhone</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- CSS DO SISTEMA (CITOLOGISTAS) -->
 <link rel="stylesheet" href="style.css">
-
-<!-- jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-
 <body>
 
-<!-- TOPO -->
-<header class="topo">
-    Sistema StartPhone
-</header>
+<header class="topo">Sistema StartPhone</header>
+<div class="subtopo">Controle Financeiro • Ordens de Serviço • Relatórios</div>
 
-<!-- SUBTOPO -->
-<div class="subtopo">
-    Controle Financeiro • Ordens de Serviço • Relatórios
-</div>
-
-<!-- CONTEÚDO -->
 <main class="container">
-
-    <!-- LINHA 1 -->
     <section class="card">
         <h2>Entradas</h2>
-
-        <select id="tipoEntrada">
-            <option>Troca de Tela</option>
-            <option>Acessórios</option>
-            <option>Venda de Aparelhos Lacrados</option>
-            <option>Venda de Aparelhos Seminovos</option>
-            <option>Formatação</option>
-            <option>Remoção de Vírus</option>
-            <option>Reparo de Placas</option>
-            <option>Manutenção </option>
-            <option>Troca de tela</option>
-            <option>Troca de bateria</option>
-            <option>Troca de conector</option>
-            <option>Troca periféricos</option>
-            <option>Venda de Carregador</option>
-            <option>Venda de Cabo</option>
-            <option>Venda de pelicula</option>
-            <option>Venda de fone de ouvido</option>
-    
-        </select>
-
+        <input type="text" id="tipoEntrada" placeholder="Descrição da Entrada">
         <input type="number" id="valorEntrada" placeholder="Valor">
         <input type="number" id="lucroEntrada" placeholder="Lucro">
         <input type="date" id="dataEntrada">
-
         <button onclick="addEntrada()">Adicionar</button>
     </section>
 
     <section class="card">
         <h2>Prejuízos</h2>
-
         <input id="descPrejuizo" placeholder="Descrição">
         <input type="number" id="valorPrejuizo" placeholder="Valor">
-
         <button onclick="addPrejuizo()">Adicionar</button>
     </section>
 
-    <!-- LINHA 2 -->
     <section class="card">
         <h2>Saídas</h2>
-
         <input id="descSaida" placeholder="Descrição">
         <input type="number" id="valorSaida" placeholder="Valor">
-
         <button onclick="addSaida()">Adicionar</button>
     </section>
 
     <section class="card">
-    <h2>Gastos Fixos</h2>
-
-    <select id="tipoGastoFixo">
-        <option>Aluguel</option>
-        <option>Luz</option>
-        <option>Internet</option>
-        <option>Água</option>
-        <option>Comida</option>
-    </select>
-
-    <input type="number" id="valorGastoFixo" placeholder="Valor">
-
-    <button onclick="addGastoFixo()">Adicionar</button>
-</section>
-
+        <h2>Gastos Fixos</h2>
+        <select id="tipoGastoFixo">
+            <option>Aluguel</option>
+            <option>Luz</option>
+            <option>Internet</option>
+            <option>Água</option>
+            <option>Comida</option>
+        </select>
+        <input type="number" id="valorGastoFixo" placeholder="Valor">
+        <button onclick="addGastoFixo()">Adicionar</button>
+    </section>
 
     <section class="card">
         <h2>Relatórios</h2>
-
         <select id="tipoRelatorio">
             <option value="entradas">Entradas</option>
             <option value="prejuizos">Prejuízos</option>
             <option value="saidas">Saídas</option>
             <option value="faturamento">Faturamento Total</option>
+        </select>
 
+        <select id="filtroMes" style="margin-top: 5px;">
+            <option value="todos">Todos os Meses</option>
+            <option value="01">Janeiro</option><option value="02">Fevereiro</option>
+            <option value="03">Março</option><option value="04">Abril</option>
+            <option value="05">Maio</option><option value="06">Junho</option>
+            <option value="07">Julho</option><option value="08">Agosto</option>
+            <option value="09">Setembro</option><option value="10">Outubro</option>
+            <option value="11">Novembro</option><option value="12">Dezembro</option>
         </select>
 
         <button onclick="mostrarPrevia()">Mostrar prévia</button>
+        <div id="previaRelatorio" style="margin-top:15px;"></div>
+        <button onclick="gerarRelatorio()">Gerar PDF</button>
 
-        
+        <button onclick="limparTudo()" style="background:#c62828;color:#fff;margin-top:10px;">Limpar tudo</button>
 
-<div id="previaRelatorio" style="margin-top:15px;"></div>
-
-<button onclick="gerarRelatorio()">Gerar PDF</button>
-
-  <!-- BOTÃO DE LIMPAR -->
-    <button onclick="limparTudo()" style="background:#c62828;color:#fff;margin-top:10px;">
-        Limpar tudo
-    </button>
-</section>
-
-
-
+        <div style="margin-top: 15px; font-size: 12px; color: #666;">
+            Gastos com acessorios mensais:<br>
+            <strong style="color: #1b8f4d; font-size: 14px;">R$ <span id="totalAcessorios">0.00</span></strong>
+        </div>
     </section>
 
-    <!-- LINHA 3 -->
     <section class="card">
         <h2>Ordem de Serviço</h2>
-
         <input type="date" id="osData">
-
         <input id="osCliente" placeholder="Nome do Cliente">
         <input id="osTelefone" placeholder="Telefone">
         <input id="osCpf" placeholder="CPF">
-
         <input id="osEquipamento" placeholder="Equipamento">
         <input id="osImei" placeholder="IMEI / Série">
         <input id="osSenha" placeholder="Senha do Equipamento">
-
         <textarea id="osObs" placeholder="Defeito / Observações"></textarea>
-
         <input id="osValor" placeholder="Valor do Serviço">
-
         <select id="osPagamento">
             <option>Dinheiro</option>
             <option>PIX</option>
             <option>Cartão Débito</option>
             <option>Cartão Crédito</option>
         </select>
-
         <button onclick="gerarOS()">Gerar Ordem de Serviço (PDF)</button>
-
-        <section class="card">
-    <h2>Ordem de Compra</h2>
-
-    <input type="date" id="ocData">
-
-    <input id="ocFornecedor" placeholder="Nome do Fornecedor">
-    <input id="ocTelefone" placeholder="Telefone">
-    <input id="ocCnpj" placeholder="CNPJ">
-
-    <input id="ocEquipamento" placeholder="Produto / Equipamento">
-    <input id="ocSerie" placeholder="Número de Série">
-    <input id="ocModelo" placeholder="Modelo">
-
-    <textarea id="ocFicha" placeholder="Fichas Técnicas"></textarea>
-
-    <input id="ocValor" placeholder="Valor da Compra">
-
-    <select id="ocPagamento">
-        <option>Dinheiro</option>
-        <option>PIX</option>
-        <option>Cartão Débito</option>
-        <option>Cartão Crédito</option>
-    </select>
-
-    <button onclick="gerarOC()">Gerar Ordem de Compra (PDF)</button>
-</section>
-
     </section>
 
-    <!-- FUTURO MÓDULO -->
     <section class="card">
-        <h2>Módulo Futuro</h2>
-        <p style="color:#777;">Reservado para expansão do sistema.</p>
+        <h2>Ordem de Compra</h2>
+        <input type="date" id="ocData">
+        <input id="ocFornecedor" placeholder="Nome do Fornecedor">
+        <input id="ocTelefone" placeholder="Telefone">
+        <input id="ocCnpj" placeholder="CNPJ">
+        <input id="ocEquipamento" placeholder="Produto / Equipamento">
+        <input id="ocSerie" placeholder="Número de Série">
+        <input id="ocModelo" placeholder="Modelo">
+        <textarea id="ocFicha" placeholder="Fichas Técnicas"></textarea>
+        <input id="ocValor" placeholder="Valor da Compra">
+        <select id="ocPagamento">
+            <option>Dinheiro</option>
+            <option>PIX</option>
+            <option>Cartão Débito</option>
+            <option>Cartão Crédito</option>
+        </select>
+        <button onclick="gerarOC()">Gerar Ordem de Compra (PDF)</button>
     </section>
-
 </main>
 
-<!-- SCRIPTS -->
 <script src="script.js"></script>
 <script src="os.js"></script>
-
 </body>
 </html>
