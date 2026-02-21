@@ -168,14 +168,18 @@ function mostrarPrevia() {
    =============================== */
 function deletarRegistro(index, tipo) {
     if (!confirm("Deseja apagar?")) return;
+
     if (tipo === "entradas") entradas.splice(index, 1);
     if (tipo === "prejuizos") prejuizos.splice(index, 1);
     if (tipo === "saidas") saidas.splice(index, 1);
+
     localStorage.setItem("entradas", JSON.stringify(entradas));
     localStorage.setItem("prejuizos", JSON.stringify(prejuizos));
     localStorage.setItem("saidas", JSON.stringify(saidas));
+
     mostrarPrevia();
     atualizarGastosAcessorios();
+    atualizarGastosComida(); // 👈 FALTAVA ISSO
 }
 
 function limparTudo() {
