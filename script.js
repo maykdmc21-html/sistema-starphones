@@ -20,6 +20,25 @@ function atualizarGastosAcessorios() {
     if (campoAcessorios) campoAcessorios.innerText = total.toFixed(2);
 }
 
+function atualizarGastosComida() {
+    let total = 0;
+
+    saidas.forEach(s => {
+        const desc = (s.descricao || "").toLowerCase();
+
+        if (
+            desc.includes("comida") ||
+            desc.includes("lanche") ||
+            desc.includes("lanches")
+        ) {
+            total += Number(s.valor);
+        }
+    });
+
+    const campo = document.getElementById("totalComida");
+    if (campo) campo.innerText = total.toFixed(2);
+}
+
 /* ===============================
     ADICIONAR REGISTROS
    =============================== */
@@ -53,6 +72,7 @@ function addSaida() {
     localStorage.setItem("saidas", JSON.stringify(saidas));
     alert("Saída adicionada");
     atualizarGastosAcessorios();
+    atualizarGastosComida();
 }
 
 function addGastoFixo() {
@@ -173,7 +193,10 @@ function formatarData(data) {
 function gerarOS() { /* Vem do os.js */ }
 function gerarOC() { /* Mantido */ }
 
-window.onload = atualizarGastosAcessorios;
+window.onload = function() {
+    atualizarGastosAcessorios();
+    atualizarGastosComida();
+};
 
 /* ===============================
     GERAR RELATÓRIO (PDF - MODELO STARTPHONE)
