@@ -4,7 +4,7 @@
 function proximaOC() {
     let numero = localStorage.getItem("numeroOC");
     if (!numero) numero = 2000;
-    numero = parseInt(numero) + 1;
+    numero = parseInt(numero) + 
     localStorage.setItem("numeroOC", numero);
     return numero;
 }
@@ -194,3 +194,4 @@ function gerarOC() {
 
     pdf.save(`OC_${numeroOC}.pdf`);
 }
+
