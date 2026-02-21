@@ -153,7 +153,7 @@ function gerarOC() {
 
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(12);
-    pdf.text("ORDEM DE COMPRA", 105, 32, { align: "center" });
+    pdf.text("NOTA DE COMPRA", 105, 32, { align: "center" });
 
     pdf.setFont("helvetica", "normal");
     pdf.text(`OC Nº: ${numeroOC}`, 150, 38);
@@ -163,7 +163,7 @@ function gerarOC() {
 
     /* FORNECEDOR */
     pdf.setFont("helvetica", "bold");
-    pdf.text("DADOS DO FORNECEDOR", 10, 56);
+    pdf.text("DADOS DO CLIENTE", 10, 56);
     pdf.rect(10, 59, 190, 24);
     
     pdf.setFont("helvetica", "normal");
