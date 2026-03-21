@@ -67,6 +67,13 @@
             <option value="09">Setembro</option><option value="10">Outubro</option>
             <option value="11">Novembro</option><option value="12">Dezembro</option>
         </select>
+         <!--////////////////////////////////////////////////aqui o card Botão de Backup no Sistema/////////////////////////////////////////////////////////-->
+         <section class="card">
+    <h2>Manutenção de Dados</h2>
+    <button onclick="exportarDados()" style="background: #2c3e50; margin-bottom: 10px;">Fazer Backup (Exportar)</button>
+    <input type="file" id="importFile" style="display:none" onchange="importarDados(event)">
+    <button onclick="document.getElementById('importFile').click()" style="background: #8e44ad;">Restaurar Backup (Importar)</button>
+</section>
 
         <button onclick="mostrarPrevia()">Mostrar prévia</button>
         <div id="previaRelatorio" style="margin-top:15px;"></div>
@@ -122,7 +129,28 @@ Gastos com COMIDA / LANCHES:<br>
             <option>Cartão Débito</option>
             <option>Cartão Crédito</option>
         </select>
+ 
         <button onclick="gerarOC()">Gerar Ordem de Compra (PDF)</button>
+
+        <!--//////////////////////////////////// aqui /////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <div id="alertaFatura" class="alerta-fatura-topo" style="display: none;">
+    <span>⚠️ <strong>Atenção:</strong> Fatura EFI vence dia 18!</span>
+    <a href="fatura.pdf" download="fatura.pdf">Baixar fatura.pdf</a>
+</div>
+
+<div id="containerLembretes"></div>
+
+<main class="container">
+    <section class="card">
+        <h2>Agendar Lembrete 🔔</h2>
+        <input type="text" id="lembreteCliente" placeholder="Nome do Cliente">
+        <input type="text" id="lembreteTelefone" placeholder="Telefone">
+        <textarea id="lembreteDesc" placeholder="Descrição"></textarea>
+        <input type="date" id="lembreteData">
+        <button onclick="addLembrete()" style="background: #f1c40f; color: #000; font-weight: bold;">Criar Lembrete</button>
+    </section>
+
+    </main>
     </section>
 </main>
 
