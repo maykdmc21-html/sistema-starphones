@@ -277,3 +277,131 @@ function gerarRelatorio() {
 
     doc.save(`Relatorio_StartPhone_${dataE.replace(/\//g, '-')}.pdf`);
 }
+
+/**///////////////////////////////////////////////////////////controlar a lógica de datas e o sumário mensal////////////////////////// */
+
+
+// Lógica de Lembretes
+let lembretes = JSON.parse(localStorage.getItem("lembretes")) || [];
+
+function addLembrete() {
+    const cliente = document.getElementById("lembreteCliente").value;
+    const tel = document.getElementById("lembreteTelefone").value;
+    const desc = document.getElementById("lembreteDesc").value;
+    const data = document.getElementById("lembreteData").value;
+
+    if(!cliente || !data) return alert("Preencha o nome e a data!");
+
+    lembretes.push({ cliente, tel, desc, data, id: Date.now() });
+    localStorage.setItem("lembretes", JSON.stringify(lembretes));
+    
+    // Limpar campos
+    document.getElementById("lembreteCliente").value = "";
+    document.getElementById("lembreteTelefone").value = "";
+    document.getElementById("lembreteDesc").value = "";
+    
+    renderizarLembretes();
+}
+
+function renderizarLembretes() {
+    const container = document.getElementById("containerLembretes");
+    container.innerHTML = lembretes.map(l => `
+        <div class="alerta-piscante">
+            <span>🔔 ${l.cliente} (${l.tel}): ${l.desc} - DATA: ${l.data.split('-').reverse().join('/')}</span>
+            <button onclick="removerLembrete(${l.id})">FEITO</button>
+        </div>
+    `).join('');
+}
+
+function removerLembrete(id) {
+    lembretes = lembretes.filter(l => l.id !== id);
+    localStorage.setItem("lembretes", JSON.stringify(lembretes));
+    renderizarLembretes();
+}
+
+// Lógica da Fatura EFI (Aparece do dia 15 ao 18)
+function verificarFaturaEFI() {
+    const hoje = new Date();
+    const dia = hoje.getDate();
+    if (dia >= 15 && dia <= 18) {
+        document.getElementById("alertaFatura").style.display = "block";
+    }
+}
+
+// Reset mensal dos gastos (Comida/Acessórios)
+function atualizarResumoMensal() {
+    const mesAtual = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    let totalAcessorios = 0;
+    let totalComida = 0;
+
+    saidas.forEach(s => {
+        if (s.data && s.data.split("-")[1] === mesAtual) {
+            const desc = s.descricao.toLowerCase();
+            if (desc.includes("acessorios")) totalAcessorios += Number(s.valor);
+            if (desc.includes("comida") || desc.includes("lanche")) totalComida += Number(s.valor);
+        }
+    });
+
+    document.getElementById("totalAcessorios").innerText = totalAcessorios.toFixed(2);
+    document.getElementById("totalComida").innerText = totalComida.toFixed(2);
+}
+
+// Iniciar funções ao carregar a página
+const originalOnload = window.onload;
+window.onload = function() {
+    if(originalOnload) originalOnload();
+    renderizarLembretes();
+    verificarFaturaEFI();
+    atualizarResumoMensal();
+};
+
+
+function registrarCompraComoEntrada(descricao, valor) {
+    const novaEntrada = {
+        tipo: `Compra: ${descricao}`,
+        valor: Number(valor),
+        lucro: 0, // Definido como 0 pois é uma aquisição inicial
+        data: new Date().toISOString().split("T")[0]
+    };
+    
+    entradas.push(novaEntrada);
+    localStorage.setItem("entradas", JSON.stringify(entradas));
+    console.log("Compra registrada nas entradas com sucesso.");
+}
+
+
+
+/* ////////////////////////////////////////////////////Funções de Migração no/////////////////////////////////////////////////////////*/
+
+// Função para baixar todos os dados atuais em um arquivo .json
+function exportarDados() {
+    const dados = {
+        gastosFixos: localStorage.getItem("gastosFixos"),
+        entradas: localStorage.getItem("entradas"),
+        prejuizos: localStorage.getItem("prejuizos"),
+        saidas: localStorage.getItem("saidas"),
+        lembretes: localStorage.getItem("lembretes"),
+        numeroOS: localStorage.getItem("numeroOS"),
+        numeroOC: localStorage.getItem("numeroOC")
+    };
+    const blob = new Blob([JSON.stringify(dados)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "backup_startphone.json";
+    a.click();
+}
+
+// Função para ler o arquivo e gravar no localStorage do novo endereço
+function importarDados(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const dados = JSON.parse(e.target.result);
+        Object.keys(dados).forEach(key => {
+            if (dados[key]) localStorage.setItem(key, dados[key]);
+        });
+        alert("Dados importados com sucesso! A página irá recarregar.");
+        location.reload();
+    };
+    reader.readAsText(event.target.files[0]);
+}
