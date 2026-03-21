@@ -131,7 +131,7 @@ function gerarOC() {
     const data = formatarDataOS(document.getElementById("ocData").value);
     const fornecedor = document.getElementById("ocFornecedor").value;
     const telefone = document.getElementById("ocTelefone").value;
-    const cnpj = document.getElementById("ocCnpj").value;
+    const cpf = document.getElementById("ocCpf").value; // Ajustado para ler o ID correto do HTML
 
     const produto = document.getElementById("ocEquipamento").value;
     const serie = document.getElementById("ocSerie").value;
@@ -161,15 +161,15 @@ function gerarOC() {
 
     pdf.line(10, 48, 200, 48);
 
-    /* FORNECEDOR */
+    /* FORNECEDOR / CLIENTE */
     pdf.setFont("helvetica", "bold");
-    pdf.text("DADOS DO CLIENTE", 10, 56);
+    pdf.text("DADOS DO VENDEDOR", 10, 56);
     pdf.rect(10, 59, 190, 24);
     
     pdf.setFont("helvetica", "normal");
     pdf.text(`Nome: ${fornecedor}`, 12, 66);
     pdf.text(`Telefone: ${telefone}`, 12, 72);
-    pdf.text(`CNPJ: ${cnpj}`, 120, 72);
+    pdf.text(`CPF/CNPJ: ${cpf}`, 120, 72);
 
     /* PRODUTO */
     pdf.setFont("helvetica", "bold");
@@ -192,6 +192,11 @@ function gerarOC() {
     pdf.text(`Valor: R$ ${valor}`, 12, 154);
     pdf.text(`Forma de Pagamento: ${pagamento}`, 120, 154);
 
+    // --- INTEGRAÇÃO COM FINANCEIRO ---
+    // Adiciona automaticamente às entradas do sistema
+    if (typeof registrarCompraComoEntrada === "function") {
+        registrarCompraComoEntrada(produto, valor);
+    }
+
     pdf.save(`OC_${numeroOC}.pdf`);
 }
-
